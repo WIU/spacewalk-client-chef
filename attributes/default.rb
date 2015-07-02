@@ -1,5 +1,7 @@
 default['spacewalk']['pkg_source_path'] = Chef::Config[:file_cache_path]
-default['spacewalk']['rhel']['base_url'] = 'http://yum.spacewalkproject.org/2.2-client/RHEL'
+default['spacewalk']['version'] = '2.3'
+default['spacewalk']['release'] = '2'
+default['spacewalk']['rhel']['base_url'] = "http://yum.spacewalkproject.org/#{node['spacewalk']['version']}-client/RHEL"
 default['spacewalk']['enable_osad'] = false
 default['spacewalk']['reg']['key'] = 'my-reg-key'
 default['spacewalk']['reg']['server'] = 'http://spacewalk.example.com'

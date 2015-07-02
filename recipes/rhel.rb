@@ -2,7 +2,7 @@ arch = node['kernel']['machine'] == 'x86_64' ? 'x86_64' : 'i386'
 platform_major = node['platform_version'][0]
 
 remote_file "#{Chef::Config[:file_cache_path]}/spacewalk-client-repo.rpm" do
-  source "#{node['spacewalk']['rhel']['base_url']}/#{platform_major}/#{arch}/spacewalk-client-repo-2.2-1.el#{platform_major}.noarch.rpm"
+  source "#{node['spacewalk']['rhel']['base_url']}/#{platform_major}/#{arch}/spacewalk-client-repo-#{node['spacewalk']['version']}-#{node['spacewalk']['release']}.el#{platform_major}.noarch.rpm"
   action :create
 end
 
@@ -49,3 +49,10 @@ else
     not_if { (File.exist?('/etc/sysconfig/rhn/systemid')) }
   end
 end
+
+Dir["/etc/yum.repos.d/CentOS*"].each do |path|
+    file ::File.expand_path(path) do
+        action :delete
+    end
+end
+
