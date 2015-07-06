@@ -10,7 +10,7 @@
 end
 
 if node['spacewalk']['enable_osad']
-  %w(rhncfg_5.10.14_1ubuntu1~precise2_all.deb
+  %w(rhncfg_5.10.14-1ubuntu1~precise2_all.deb
      pyjabber_0.5.0-1.4ubuntu3~precise1_all.deb
      osad_5.11.27-1ubuntu1~precise5_all.deb).each do |pkg|
     dpkg_package pkg do
