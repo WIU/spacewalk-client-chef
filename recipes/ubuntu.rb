@@ -40,6 +40,22 @@ cookbook_file '/etc/apt/apt.conf.d/40fix_spacewalk_pdiff' do
   mode '0644'
 end
 
+cookbook_file '/usr/share/rhn/up2date_client/debUtils.py' do
+    source 'debUtils.py'
+    owner 'root'
+    group 'root'
+    mode '644'
+end
+
+bash 'Use spacewalk for packages' do
+    code <<-EOH
+    sed -ie '1aModified for spacewalk by Chef' /etc/apt/sources.list
+    sed -i 's/^/#/' /etc/apt/sources.list
+    EOH
+    not_if "grep 'Modified for spacewalk' /etc/apt/sources.list"
+end
+
+
 if node['spacewalk']['enable_osad']
   directory '/usr/share/rhn' do
     owner 'root'
@@ -54,6 +70,7 @@ if node['spacewalk']['enable_osad']
     mode '0644'
     source "#{node['spacewalk']['reg']['server']}/pub/RHN-ORG-TRUSTED-SSL-CERT"
   end
+
 
   execute 'register-with-spacewalk-server' do
     command "rhnreg_ks --activationkey=#{node['spacewalk']['reg']['key']} --serverUrl=#{node['spacewalk']['reg']['server']}/XMLRPC"
@@ -71,3 +88,6 @@ else
     not_if { (File.exist?('/etc/sysconfig/rhn/systemid')) }
   end
 end
+
+
+
