@@ -5,3 +5,4 @@ default['spacewalk']['rhel']['base_url'] = "http://yum.spacewalkproject.org/#{no
 default['spacewalk']['enable_osad'] = false
 default['spacewalk']['reg']['key'] = 'my-reg-key'
 default['spacewalk']['reg']['server'] = 'http://spacewalk.example.com'
+default['spacewalk']['apt']['key'] = 'example.gpg.pub'

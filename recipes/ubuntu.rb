@@ -44,7 +44,7 @@ cookbook_file '/usr/share/rhn/up2date_client/debUtils.py' do
     source 'debUtils.py'
     owner 'root'
     group 'root'
-    mode '644'
+    mode '0644'
 end
 
 cookbook_file '/usr/lib/apt-spacewalk/pre_invoke.py' do
@@ -59,6 +59,13 @@ cookbook_file '/usr/lib/apt/methods/spacewalk' do
     owner 'root'
     group 'root'
     mode '0755'
+end
+
+bash 'add apt-key' do
+    code <<-EOH
+    apt-key add #{node['spacewalk']['pkg_source_path']}/#{node['spacewalk']['apt']['key']}
+    EOH
+    not_if 'apt-key list | grep -i spacewalk'
 end
 
 bash 'Use spacewalk for packages' do
