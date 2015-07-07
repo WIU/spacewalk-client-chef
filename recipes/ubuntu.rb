@@ -47,6 +47,20 @@ cookbook_file '/usr/share/rhn/up2date_client/debUtils.py' do
     mode '644'
 end
 
+cookbook_file '/usr/lib/apt-spacewalk/pre_invoke.py' do
+    source 'pre_invoke.py'
+    owner 'root'
+    group 'root'
+    mode '0755'
+end
+
+cookbook_file '/usr/lib/apt/methods/spacewalk' do
+    source 'spacewalk'
+    owner 'root'
+    group 'root'
+    mode '0755'
+end
+
 bash 'Use spacewalk for packages' do
     code <<-EOH
     sed -ie '1aModified for spacewalk by Chef' /etc/apt/sources.list
