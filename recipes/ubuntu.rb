@@ -6,7 +6,6 @@
   dpkg_package pkg do
     source "#{node['spacewalk']['pkg_source_path']}/#{pkg}"
     ignore_failure true
-    notifies :run, 'execute[install-spacewalk-deps]', :immediately
   end
 end
 
@@ -17,14 +16,13 @@ if node['spacewalk']['enable_osad']
     dpkg_package pkg do
       source "#{node['spacewalk']['pkg_source_path']}/#{pkg}"
       ignore_failure true
-      notifies :run, 'execute[install-spacewalk-deps]', :immediately
     end
   end
 end
 
 execute 'install-spacewalk-deps' do
   command 'apt-get -yf install'
-  action :nothing
+  only_if { File.exists?("/opt/spacewalk/install_deps")
 end
 
 apt_package 'python-libxml2'
