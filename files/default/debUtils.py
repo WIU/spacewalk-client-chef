@@ -23,19 +23,25 @@ def verifyPackages(packages):
 
     return [], missing_packages
 
+# Adapted from dpkg's parseversion in lib/parsehelp.c
 def parseVRE(version):
-    epoch = ""
-#    version_tmpArr = version.split('-')
-#    if len(version_tmpArr) == 1 :
-    version = version
-    release = 'X'
+    colon = version.find(":")
+    if colon > 0:
+        epoch = version.split(':', 1)[0]
+        if epoch.isnumeric():
+            version = version[colon+1:] 
+        else:
+            epoch = ""
+    else:
+        epoch = ""
+    hyphen = version.rfind("-")
+    if hyphen > 0:
+        release = version.rsplit("-", 1)[1]
+        version = version[:hyphen]
+    else:
+        release = "0"
     return version, release, epoch
     
-#    else:
-#        version = version_tmpArr[0]
-#        release = version_tmpArr[1]
-#        return version, release, epoch
-
 def installTime(pkg_name, arch=None):
     paths = ['/var/lib/dpkg/info/%s.list' % (pkg_name,)]
     if arch:

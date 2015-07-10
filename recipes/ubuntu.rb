@@ -1,28 +1,11 @@
-%w(apt-transport-spacewalk_1.0.6-4.1_all.deb
-   python-ethtool_0.11-2_amd64.deb
-   python-rhn_2.5.55-2_all.deb
-   rhn-client-tools_1.8.26-4_amd64.deb
-   rhnsd_5.0.4-3_amd64.deb).each do |pkg|
-  dpkg_package pkg do
-    source "#{node['spacewalk']['pkg_source_path']}/#{pkg}"
-    ignore_failure true
-  end
+apt_repository "spacewalk_client" do
+    uri node['spacewalk']['apt']['repository']
+    distribution node['lsb']['codename']
 end
 
-if node['spacewalk']['enable_osad']
-  %w(rhncfg_5.10.14-1ubuntu1~precise2_all.deb
-     pyjabber_0.5.0-1.4ubuntu3~precise1_all.deb
-     osad_5.11.27-1ubuntu1~precise5_all.deb).each do |pkg|
-    dpkg_package pkg do
-      source "#{node['spacewalk']['pkg_source_path']}/#{pkg}"
-      ignore_failure true
-    end
-  end
-end
 
-execute 'install-spacewalk-deps' do
-  command 'apt-get -yf install'
-  only_if { File.exists?("/opt/spacewalk/install_deps")
+%w{ apt-transport-spacewalk rhnsd}.each do |pkg|
+    package pkg
 end
 
 apt_package 'python-libxml2'
@@ -64,7 +47,7 @@ end
 
 bash 'add apt-key' do
     code <<-EOH
-    apt-key add #{node['spacewalk']['pkg_source_path']}/#{node['spacewalk']['apt']['key']}
+    apt-key add #{Chef::Config[:file_cache_path]}/#{node['spacewalk']['apt']['key']}
     EOH
     not_if 'apt-key list | grep -i spacewalk'
 end
