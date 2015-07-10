@@ -28,7 +28,7 @@ def parseVRE(version):
     colon = version.find(":")
     if colon > 0:
         epoch = version.split(':', 1)[0]
-        if epoch.isnumeric():
+        if epoch.isdigit():
             version = version[colon+1:] 
         else:
             epoch = ""
