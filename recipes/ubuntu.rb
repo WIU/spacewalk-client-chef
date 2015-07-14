@@ -52,14 +52,11 @@ bash 'add apt-key' do
     not_if 'apt-key list | grep -i spacewalk'
 end
 
-bash 'Use spacewalk for packages' do
-    code <<-EOH
-    sed -ie '1aModified for spacewalk by Chef' /etc/apt/sources.list
-    sed -i 's/^/#/' /etc/apt/sources.list
-    EOH
-    not_if "grep 'Modified for spacewalk' /etc/apt/sources.list"
+apt_preference 'spacewalk' do
+    glob '*'
+    pin 'origin spacewalk.wiu.edu'
+    pin_priority '700'
 end
-
 
 if node['spacewalk']['enable_osad']
   directory '/usr/share/rhn' do
