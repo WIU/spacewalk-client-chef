@@ -55,7 +55,7 @@ end
 apt_preference 'spacewalk' do
     glob '*'
     pin 'origin spacewalk.wiu.edu'
-    pin_priority '700'
+    pin_priority '1005'
 end
 
 if node['spacewalk']['enable_osad']
